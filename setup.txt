@@ -1,0 +1,35 @@
+install necessaries: https://linux.how2shout.com/install-python-3-9-or-3-8-on-ubuntu-22-04-lts-jammy-jellyfish/
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa   enter
+sudo apt install python3.8 
+sudo apt install git
+sudo apt install gcc
+
+install cuda: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
+sudo apt-get install linux-headers-$(uname -r)
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb
+sudo cp /var/cuda-repo-ubuntu2204-12-1-local/cuda-*-keyring.gpg /usr/share/keyrings/
+sudo apt-get update
+sudo apt-get -y install cuda
+sudo apt-get install nvidia-gds
+sudo apt install nvidia-cuda-toolkit
+
+git clone https://github.com/yaodongyu/TRADES
+Note: conda's package does not work if followed by previous website
+install libraries for https://github.com/yaodongyu/TRADES
+https://www.anaconda.com/products/distribution#linux
+bash Anaconda3-2022.10-Linux-x86_64.sh
+source ~/.bashrc
+
+
+nvidia Geforce RTX 3070 Laptop GPU
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+
+change   train_trades_cifar10.py  model = ResNet18().to(device)
+python train_trades_cifar10.py
+

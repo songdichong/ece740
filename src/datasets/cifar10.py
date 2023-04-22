@@ -54,7 +54,7 @@ class AutoAttck_CIFAR10_Dataset(TorchvisionDataset):
 
     def __init__(self, root: str, normal_class: int = 5, known_outlier_class: int = 3, n_known_outlier_classes: int = 0,
                  ratio_known_normal: float = 0.0, ratio_known_outlier: float = 0.0, ratio_pollution: float = 0.0, 
-                 target_class = 0):
+                 target_class = 0, advserial_data_path = None):
         super().__init__(root)
 
         # Define normal and outlier classes
@@ -83,8 +83,7 @@ class AutoAttck_CIFAR10_Dataset(TorchvisionDataset):
         original_labels = np.array(train_set.targets, copy=True)
 
         # Then load the adversarial data
-        PATH = r'C:\Users\songd\Desktop\ece740\pytorch-cifar\attackDir\aa_standard_50000_Linf_eps_0.03100.pth'
-        test_loader = torch.load(PATH)['adv_complete']
+        test_loader = torch.load(advserial_data_path)['adv_complete']
         tensors = test_loader[0].permute(0, 2, 3, 1)
         tensors = (tensors * 255).numpy().astype(np.uint8)
         targets = np.array(test_loader[1])
@@ -127,7 +126,7 @@ class AutoAttck_CIFAR100_Dataset(TorchvisionDataset):
 
     def __init__(self, root: str, normal_class: int = 5, known_outlier_class: int = 3, n_known_outlier_classes: int = 0,
                  ratio_known_normal: float = 0.0, ratio_known_outlier: float = 0.0, ratio_pollution: float = 0.0, 
-                 target_class = 0):
+                 target_class = 0, advserial_data_path = None):
         super().__init__(root)
 
         # Define normal and outlier classes
@@ -156,8 +155,7 @@ class AutoAttck_CIFAR100_Dataset(TorchvisionDataset):
         original_labels = np.array(train_set.targets, copy=True)
 
         # Then load the adversarial data
-        PATH = r'C:\Users\songd\Desktop\ece740\pytorch-cifar\attackDir\aac100_standard_60000_Linf_eps_0.03100.pth'
-        test_loader = torch.load(PATH)['adv_complete']
+        test_loader = torch.load(advserial_data_path)['adv_complete']
         tensors = test_loader[0].permute(0, 2, 3, 1)
         tensors = (tensors * 255).numpy().astype(np.uint8)
         targets = np.array(test_loader[1])

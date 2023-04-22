@@ -8,7 +8,9 @@ from utils.visualization.plot_images_grid import plot_images_grid
 from datasets.cifar10 import AutoAttck_CIFAR10_Dataset, AutoAttck_CIFAR100_Dataset
 from DeepSAD import DeepSAD
 from datasets.main import load_dataset
+import os
 # Get configuration
+
 xp_path = "../log"
 data_path = "../data"
 dataset_name = 'cifar10'
@@ -35,6 +37,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 log_file = xp_path + '/log.txt'
+if not os.path.isdir(xp_path):
+    os.mkdir(xp_path)
 file_handler = logging.FileHandler(log_file)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
@@ -42,7 +46,7 @@ logger.addHandler(file_handler)
 normal_class = 0
 
 identified_outliers_score = [] 
-for target_class in range(0, 100, 10):
+for target_class in range(0, 10):
 
     # Print paths
     logger.info('Log file is %s' % log_file)
@@ -78,26 +82,20 @@ for target_class in range(0, 100, 10):
         logger.info('Number of threads: %d' % num_threads)
         logger.info('Number of dataloader workers: %d' % n_jobs_dataloader)
     # Load data
-    # dataset = AutoAttck_CIFAR10_Dataset(root=data_path,
-    #                                     normal_class=normal_class,
-    #                                     known_outlier_class=known_outlier_class,
-    #                                     n_known_outlier_classes=n_known_outlier_classes,
-    #                                     ratio_known_normal=ratio_known_normal,
-    #                                     ratio_known_outlier=ratio_known_outlier,
-    #                                     ratio_pollution=ratio_pollution,
-    #                                     target_class = target_class)
-    dataset = AutoAttck_CIFAR100_Dataset(root=data_path,
+    dataset = AutoAttck_CIFAR10_Dataset(root=data_path,
                                         normal_class=normal_class,
                                         known_outlier_class=known_outlier_class,
                                         n_known_outlier_classes=n_known_outlier_classes,
                                         ratio_known_normal=ratio_known_normal,
                                         ratio_known_outlier=ratio_known_outlier,
                                         ratio_pollution=ratio_pollution,
-                                        target_class = target_class)
+                                        target_class = target_class,
+                                        advserial_data_path= '../attackDir/aa_standard_50000_Linf_eps_0.03100.pth')
+
     deepSAD = DeepSAD(eta)
     deepSAD.set_network(net_name)
 
-    deepSAD.load_Resnet_model(model_path=r"C:\Users\songd\Desktop\ece740\pytorch-cifar\checkpointcifa100\ckpt.pth")
+    deepSAD.load_Resnet_model(model_path=r"../cifar100-ckpt.pth")
 
     
     deepSAD.train(dataset,

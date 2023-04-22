@@ -150,6 +150,8 @@ if __name__ == "__main__":
     for epoch in range(start_epoch, start_epoch+200):
         train(epoch)
         test(epoch)
+        if not os.path.isdir('resnet18cifa100'):
+            os.mkdir('resnet18cifa100')
         if epoch % 1 == 0:
                 torch.save(net.state_dict(),
                         os.path.join('./resnet18cifa100/model-wideres-epoch{}.pt'.format(epoch)))

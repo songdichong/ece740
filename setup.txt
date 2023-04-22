@@ -1,35 +1,33 @@
-install necessaries: https://linux.how2shout.com/install-python-3-9-or-3-8-on-ubuntu-22-04-lts-jammy-jellyfish/
-sudo apt update
-sudo apt install software-properties-common
-sudo add-apt-repository ppa:deadsnakes/ppa   enter
-sudo apt install python3.8 
-sudo apt install git
-sudo apt install gcc
+Suppose the environment is windows and run command through Visual Studio Code's (VSC) terminal.
+Assume python 3.9 is already installed and chosen as default python interpretor for VSC
+Assume you are running with a PC with cuda installed. (R.I.P AMD)
+Note that dataset for part 2, model used for part 3 can be downloaded at 
+https://drive.google.com/drive/u/0/folders/1cdZXZsz8Acl_kaS8P9zEUQv41g2oHPgG
 
-install cuda: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
-sudo apt-get install linux-headers-$(uname -r)
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu2204-12-1-local_12.1.0-530.30.02-1_amd64.deb
-sudo cp /var/cuda-repo-ubuntu2204-12-1-local/cuda-*-keyring.gpg /usr/share/keyrings/
-sudo apt-get update
-sudo apt-get -y install cuda
-sudo apt-get install nvidia-gds
-sudo apt install nvidia-cuda-toolkit
+1. Install the environment
+1.1 pytorch:       $ python3.9.exe -m pip install torch
+1.2 torchvision:   $ python3.9.exe -m pip install torchvision
 
-git clone https://github.com/yaodongyu/TRADES
-Note: conda's package does not work if followed by previous website
-install libraries for https://github.com/yaodongyu/TRADES
-https://www.anaconda.com/products/distribution#linux
-bash Anaconda3-2022.10-Linux-x86_64.sh
-source ~/.bashrc
+2. Train CIFAR10 and CIFAR100 
+2.1 go to directory of ECE740:  $ cd PATH_TO_FOLDER
+2.2 CIFAR10: python3.9.exe:     $ python3.9.exe train_cifar10.py
+2.3 CIFAR100: python3.9.exe:    $ python3.9.exe train_cifar100.py
+Result for part 1 can be verified here
+Note that if you cannot download CIFAR10/CIFAR100 dataset through code because of 
+urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+you can download data manually
 
+3. Use Autoattack to attack on CIFAR10 and CIFAR100
+3.1 Install autoattack: $python3.9.exe -m pip install git+https://github.com/fra31/auto-attack
+3.2 Change the 'path' variable to your resnet18 model trained with cifar10 in part 2.
+Note that you MUST have CUDA available on the device if you are using the model downloaded from the link from googledrive provided
+ex: path = "./cifar10model.pt"
+3.3 You can change the variable "n_ex" to a smaller value if you want to perform autoattack quicker. 
+This variable will influence the size of attacked images. However, if you are using your own generated model,
+for the performance for next part, we do not suggest to change the variable "n_ex" to a smaller value. 
+Otherwise there will be a Zero Division Error caused by not enough training dataset.
+3.4 If you want to change attack parameter to L2, change parameter "norm" to "L2"
+3.5 Attack CIFAR10 with $ python3.9.exe attack_cifar10.py
+3.6 Attack CIFAR100 following the procedures above
 
-nvidia Geforce RTX 3070 Laptop GPU
-pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
-
-
-change   train_trades_cifar10.py  model = ResNet18().to(device)
-python train_trades_cifar10.py
-
+4. 

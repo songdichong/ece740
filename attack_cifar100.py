@@ -56,7 +56,7 @@ if __name__ == '__main__':
     y_test = torch.cat(l, 0)
 
     individual = False
-    n_ex = 60000
+    n_ex = len(x_test)
     # run attack and save images
     with torch.no_grad():
         if not individual:

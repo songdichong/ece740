@@ -46,6 +46,8 @@ logger.addHandler(file_handler)
 normal_class = 0
 
 identified_outliers_score = [] 
+identified_normals_score = [] 
+
 for target_class in range(0, 10):
 
     # Print paths
@@ -115,23 +117,20 @@ for target_class in range(0, 10):
     indices, labels, scores = np.array(indices), np.array(labels), np.array(scores)
     identified_outliers = 0
     total_outliers = 0
+    identified_normals = 0
+    total_normals = 0
     for i in range(len(labels)):
         if labels[i] == 1:
             total_outliers += 1
+        if labels[i] == 0:
+            total_normals += 1
         if labels[i] == 1 and scores[i] > 1:
             identified_outliers += 1
-            print("scores", scores[i])
-    # idx_all_sorted = indices[np.argsort(scores)]  # from lowest to highest score
-    # idx_normal_sorted = indices[labels == 0][np.argsort(scores[labels == 0])]  # from lowest to highest score
-    # X_all_low = torch.tensor(np.transpose(dataset.test_set.data[idx_all_sorted[:32], ...], (0,3,1,2)))
-    # X_all_high = torch.tensor(np.transpose(dataset.test_set.data[idx_all_sorted[-32:], ...], (0,3,1,2)))
-    # X_normal_low = torch.tensor(np.transpose(dataset.test_set.data[idx_normal_sorted[:32], ...], (0,3,1,2)))
-    # X_normal_high = torch.tensor(np.transpose(dataset.test_set.data[idx_normal_sorted[-32:], ...], (0,3,1,2)))
-    # plot_images_grid(X_all_low, export_img=xp_path + '/all_low', padding=2)
-    # plot_images_grid(X_all_high, export_img=xp_path + '/all_high', padding=2)
-    # plot_images_grid(X_normal_low, export_img=xp_path + '/normals_low', padding=2)
-    # plot_images_grid(X_normal_high, export_img=xp_path + '/normals_high', padding=2)
+        if labels[i] == 0 and scores[i] < 1:
+            identified_normals += 1
 
-    print("identified_outliers", target_class, identified_outliers)
     identified_outliers_score.append(identified_outliers/total_outliers)
-print(identified_outliers_score)
+    identified_normals_score.append(identified_normals/total_normals)
+
+print("identified_outliers_score",identified_outliers_score, sum(identified_outliers_score)/len(identified_outliers_score))
+print("identified_normals_score",identified_normals_score, sum(identified_normals_score)/len(identified_normals_score))
